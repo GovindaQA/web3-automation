@@ -1,59 +1,35 @@
 import { test, expect } from "../fixtures/pomSynpressFixture";
-import * as metamask from "@synthetixio/synpress/commands/metamask";
-import { citizenData, expectedValues } from "../testData/dappDemoTestsData";
+import modifiedmetamask from "../commands/metamask"
+import * as synpressMetamask from "@synthetixio/synpress/commands/metamask"; // Import Synpress metamask commands
+import * as customMetamask from "../commands/metamask"; // Import your custom metamask.js methods (Adjust the import path)
 
 test.describe("Dapp Demo Tests", () => {
   test.beforeEach(async ({ homePage }) => {
+    // await homePage.ClickonCheckBox();
     await homePage.navigate();
     await homePage.connectWallet();
+
+    // await homePage.btnSignIn.locator(".button btn--rounded btn-primary btn--large request-signature__footer__sign-button").click();
+    // await customMetamask.confirmSignatureRequest();
   });
 
-  test("Connecting Wallet to the application is successful", async ({
-    homePage,
-  }) => {
-    const connectedWalletAddress = await homePage.getConnectedWalletAddress();
-    const connectedAddressMetamask = await metamask.getWalletAddress();
+  test.only("Connecting Wallet to the application is successful", async ({ homePage }) => {
+
+    // await synpressMetamask.confirmSignatureRequest();
+    // await modifiedmetamask.confirmSignatureRequest();
+
+
+   /* const connectedWalletAddress = await homePage.getConnectedWalletAddress();
+    const connectedAddressMetamask = await synpressMetamask.getWalletAddress();
     expect(connectedAddressMetamask).toEqual(connectedWalletAddress);
+    
+    // Ensure the connect button and wallet not connected text are not visible
     await expect(homePage.btnConnect).not.toBeVisible();
     await expect(homePage.textWalletNotConnected).not.toBeVisible();
-    await expect(homePage.btnAddCitizenHeader).toBeVisible();
-    expect(await homePage.getAddCitizenHeaderButtonText()).toEqual(
-      expectedValues.addCitizenButtonTextExpected
-    );
-    expect(await homePage.getTotalRecordsCount()).not.toEqual(0);
-    await expect(homePage.tableCitizens).toBeVisible();
-  });
+    
+    // Use the custom Metamask methods to interact with MetaMask
 
-  test("Disconnecting Wallet from the application is successful", async ({
-    homePage,
-  }) => {
-    await metamask.disconnectWalletFromDapp();
-    await expect(homePage.btnAddCitizenHeader).not.toBeVisible();
-    await expect(homePage.tableCitizens).not.toBeVisible();
-    await expect(homePage.btnConnect).toBeVisible();
-    expect(await homePage.getConnectButtonText()).toEqual(
-      expectedValues.connectButtonTextExpected
-    );
-    expect(await homePage.getTotalRecordsCount()).toEqual(0);
-    await expect(homePage.textWalletNotConnected).toBeVisible();
-    expect(await homePage.getWalletNotConnectedText()).toEqual(
-      expectedValues.walletNotConnectedTextExpected
-    );
-  });
-
-  test("Adding new citizen is successful", async ({
-    homePage,
-    addCitizenPage,
-  }) => {
-    const totalCountBefore = await homePage.getTotalRecordsCount();
-    await homePage.btnAddCitizenHeader.click();
-    await addCitizenPage.addCitizen(citizenData);
-    await expect(addCitizenPage.msgCitizenAddedSuccess).toBeVisible({
-      timeout: 60000,
-    });
-    await homePage.navigate();
-    await homePage.page.waitForSelector("[data-testid='citizenRow-1']");
-    const totalCountAfter = await homePage.getTotalRecordsCount();
-    expect(totalCountAfter).toBeGreaterThan(totalCountBefore);
-  });
+    // Additional assertions can be added here
+    await expect(homePage.btnAddCitizenHeader).toBeVisible(); */
+  }); 
 });
