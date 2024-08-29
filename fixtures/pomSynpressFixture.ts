@@ -1,17 +1,16 @@
 import { test as base, chromium, type BrowserContext } from "@playwright/test";
-import { initialSetup } from "@synthetixio/synpress/commands/metamask";
-import { prepareMetamask } from "@synthetixio/synpress/helpers";
 import { setExpectInstance } from "@synthetixio/synpress/commands/playwright";
+import { prepareMetamask } from "@synthetixio/synpress/helpers";
+import { initialSetup } from "@synthetixio/synpress/commands/metamask";
 import { resetState } from "@synthetixio/synpress/commands/synpress";
 import dotenv from "dotenv";
 import HomePage from "../pages/home.page";
-import AddCitizenPage from "../pages/addCitizen.page";
+import BasePage from "../pages/base.page";
 dotenv.config();
 
 interface Page {
   context: BrowserContext;
   homePage: HomePage;
-  addCitizenPage: AddCitizenPage;
 }
 
 export const test = base.extend<Page>({
@@ -20,7 +19,11 @@ export const test = base.extend<Page>({
     await setExpectInstance(expect);
     // download metamask
     const metamaskPath: string = await prepareMetamask(
-      process.env.METAMASK_VERSION != null || "10.25.0"
+        process.env.METAMASK_VERSION != null || "10.25.0"  /*this is the stable version*/
+      // process.env.METAMASK_VERSION != null || "10.30.4" /* this will work for sign in becuase its selector for SignIn button in the synpress repo is same as we are getting  */
+      //  process.env.METAMASK_VERSION != null || "11.16.16" /* these versions for try and error*/
+
+
     );
     // prepare browser args
     const browserArgs = [
@@ -41,6 +44,7 @@ export const test = base.extend<Page>({
     });
     // wait for metamask
     await context.pages()[0].waitForTimeout(3000);
+
     // setup metamask
     await initialSetup(chromium, {
       secretWordsOrPrivateKey: process.env.METAMASK_SETUP_PRIVATE_KEY,
@@ -55,9 +59,6 @@ export const test = base.extend<Page>({
   },
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
-  },
-  addCitizenPage: async ({ page }, use) => {
-    await use(new AddCitizenPage(page));
   },
 });
 
