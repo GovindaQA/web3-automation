@@ -6,6 +6,7 @@ export default class HomePage extends BasePage {
   readonly textWalletNotConnected: Locator;
   readonly tableCitizens: Locator;
   readonly textTotalRecordsCount: Locator;
+  readonly btnSignIn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -15,22 +16,16 @@ export default class HomePage extends BasePage {
     this.textWalletNotConnected = this.page.getByTestId(
       "walletNotConnectedText"
     );
-    this.tableCitizens = this.page.getByTestId("citizensTable");
-    this.textTotalRecordsCount = this.page.getByTestId("totalRecordsCount");
+
   }
 
   async navigate(): Promise<void> {
     await super.navigate(this.path);
+    // await super.ClickonCheckBox();
   }
 
   async getWalletNotConnectedText(): Promise<string> {
     const text = (await this.textWalletNotConnected.textContent()) as string;
     return text;
-  }
-
-  async getTotalRecordsCount(): Promise<number> {
-    const countText = await this.textTotalRecordsCount.textContent();
-    const count = Number(countText);
-    return count;
   }
 }
